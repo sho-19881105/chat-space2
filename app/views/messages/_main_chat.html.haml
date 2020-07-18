@@ -2,28 +2,21 @@
   .RightHeader
     .RightHeader__group
       .RightHeader__groupName
-        Maiyan
+        = @group.name
       %ul.RightHeader__memberList
         Member :
         %li.RightHeader__Member
-          maiyan
-    = link_to "#", class: "RightHeader__editBtn" do
+          - @group.users.each do |user|
+            = user.name
+    = link_to edit_group_path(@group), class: "RightHeader__editBtn" do
       Edit
   .MessageField
-    .MessageBox
-      .MessageInfo
-        .MessageInfo__member
-          maiyan
-        .MessageInfo__date
-          2020年7月17日
-      .Message
-        %p.Message__content
-          乃木坂
+    = render @messages
   .Footer
-    %form.Form
+    = form_with model: [@group, @message], html: {class: "Form" }, local: true do |f|
       .Form__contents
-        %input.Form__inputContents{type: "text",  placeholder: "type a message"}
-        %label.Form__inputImage
-          =icon("far", "image")
-          %input.Hidden{type: "file"}
-      %input.Form__submit{type: "submit", value: "Send"}
+        = f.text_field :content, class: "Form__inputContents", placeholder: "type a message"
+        = f.label :image, class: "Form__inputImage" do
+          = icon("far", "image")
+          = f.file_field :image, class: "Hidden"
+      = f.submit "Send", class: "Form__submit"
